@@ -1,78 +1,81 @@
-package com.evest.antivirus.ui.components
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
+}
 
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.GppGood
-import androidx.compose.material.icons.filled.GppMaybe
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.evest.antivirus.ui.theme.DangerRed
-import com.evest.antivirus.ui.theme.NeonPurple
-import com.evest.antivirus.ui.theme.SafeGreen
-import com.evest.antivirus.ui.theme.WarnYellow
-import com.evest.antivirus.ui.viewmodel.ProtectionStatus
+android {
+    namespace = "com.evest.antivirus"
+    compileSdk = 34
 
-@Composable
-fun StatusOrb(status: ProtectionStatus, orbSize: Dp = 180.dp) {
-    val color: Color = when (status) {
-        ProtectionStatus.SAFE -> SafeGreen
-        ProtectionStatus.WARNING -> WarnYellow
-        ProtectionStatus.DANGER -> DangerRed
-        ProtectionStatus.SCANNING -> NeonPurple
-        ProtectionStatus.UNKNOWN -> NeonPurple
+    defaultConfig {
+        applicationId = "com.evest.antivirus"
+        minSdk = 26
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0.0"
     }
 
-    val infinite = rememberInfiniteTransition(label = "orb_pulse")
-    val pulse: Float by infinite.animateFloat(
-        initialValue = 0.85f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(tween(1400), RepeatMode.Reverse),
-        label = "pulse"
-    )
-
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.size(orbSize)) {
-        Canvas(modifier = Modifier.size(orbSize)) {
-            val radiusPx: Float = size.minDimension / 2f
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colors = listOf(color.copy(alpha = 0.45f * pulse), color.copy(alpha = 0f)),
-                    center = Offset(size.width / 2f, size.height / 2f),
-                    radius = radiusPx * 1.1f
-                )
-            )
-            drawCircle(
-                color = color.copy(alpha = 0.9f),
-                radius = radiusPx * 0.55f * pulse
-            )
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
-        Icon(
-            imageVector = when (status) {
-                ProtectionStatus.SAFE -> Icons.Filled.GppGood
-                ProtectionStatus.WARNING -> Icons.Filled.GppMaybe
-                ProtectionStatus.DANGER -> Icons.Filled.Warning
-                ProtectionStatus.SCANNING -> Icons.Filled.Sync
-                ProtectionStatus.UNKNOWN -> Icons.Filled.GppMaybe
-            },
-            contentDescription = null,
-            tint = Color.Black,
-            modifier = Modifier.size(orbSize / 2.6f)
-        )
+        debug {
+            isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+        }
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
+    implementation("androidx.activity:activity-compose:1.9.1")
+
+    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    implementation("androidx.media3:media3-exoplayer:1.4.0")
+    implementation("androidx.media3:media3-ui:1.4.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.json:json:20240303")
+
+    debugImplementation("androidx.compose.ui:ui-tooling")
 }
