@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Evest Antivirus</string>
+    <string name="first_run_message">Evest Antivirus destroyed virus Dusk.</string>
+</resources>

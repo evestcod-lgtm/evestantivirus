@@ -1,0 +1,79 @@
+{
+  "db_version": 1,
+  "updated": "2026-07-01",
+  "signatures": [
+    {
+      "id": "AND.PKG.FakeCleanerBooster",
+      "type": "package_name",
+      "match": "com.fake.cleaner.booster",
+      "severity": "high",
+      "family": "FakeCleaner",
+      "description": "Приложение маскируется под 'ускоритель телефона', обычно показывает фейковую очистку и накручивает рекламу.",
+      "recommendation": "uninstall"
+    },
+    {
+      "id": "AND.PKG.HiddenAdsLoader",
+      "type": "package_name",
+      "match": "com.adsloader.hidden.service",
+      "severity": "medium",
+      "family": "AdWare",
+      "description": "Скрытая рекламная нагрузка, работающая в фоне без видимого интерфейса.",
+      "recommendation": "uninstall"
+    },
+    {
+      "id": "AND.HASH.SampleDropperTemplate",
+      "type": "sha256",
+      "match": "0000000000000000000000000000000000000000000000000000000000000000",
+      "severity": "critical",
+      "family": "Dropper.Generic",
+      "description": "Шаблон записи для APK с известным вредоносным хэшем. Замени match на реальный SHA-256 при обновлении базы.",
+      "recommendation": "quarantine"
+    },
+    {
+      "id": "AND.HEUR.AccessibilityOverlaySms",
+      "type": "permission_combo",
+      "match": [
+        "android.permission.BIND_ACCESSIBILITY_SERVICE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.RECEIVE_SMS"
+      ],
+      "severity": "high",
+      "family": "Banker.Heuristic",
+      "description": "Классическая связка банковских троянов Android (Anubis/Cerberus/SharkBot-подобное поведение): служба спец.возможностей + оверлей поверх других окон + перехват SMS для обхода 2FA.",
+      "recommendation": "review"
+    },
+    {
+      "id": "AND.HEUR.SmsPremiumAdmin",
+      "type": "permission_combo",
+      "match": [
+        "android.permission.SEND_SMS",
+        "android.permission.BIND_DEVICE_ADMIN"
+      ],
+      "severity": "high",
+      "family": "Trojan.SMS",
+      "description": "Возможность скрытой отправки платных SMS в сочетании с правами администратора устройства (сложно удалить обычным способом).",
+      "recommendation": "review"
+    },
+    {
+      "id": "AND.HEUR.SilentInstallerRequest",
+      "type": "permission_combo",
+      "match": [
+        "android.permission.REQUEST_INSTALL_PACKAGES",
+        "android.permission.SYSTEM_ALERT_WINDOW"
+      ],
+      "severity": "medium",
+      "family": "Dropper.Heuristic",
+      "description": "Приложение может предлагать установку сторонних APK поверх других окон — типичный паттерн дропперов и навязчивой рекламы.",
+      "recommendation": "review"
+    },
+    {
+      "id": "AND.HEUR.UnknownSourceSideload",
+      "type": "install_source",
+      "match": "UNKNOWN",
+      "severity": "low",
+      "family": "Sideload",
+      "description": "Приложение установлено не из Google Play и не через ADB — источник неизвестен. Само по себе это не угроза, но повышает риск.",
+      "recommendation": "review"
+    }
+  ]
+}
