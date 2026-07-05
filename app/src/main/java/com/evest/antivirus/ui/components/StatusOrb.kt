@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -30,7 +31,7 @@ import com.evest.antivirus.ui.viewmodel.ProtectionStatus
 
 @Composable
 fun StatusOrb(status: ProtectionStatus, orbSize: Dp = 180.dp) {
-    val color = when (status) {
+    val color: Color = when (status) {
         ProtectionStatus.SAFE -> SafeGreen
         ProtectionStatus.WARNING -> WarnYellow
         ProtectionStatus.DANGER -> DangerRed
@@ -39,7 +40,7 @@ fun StatusOrb(status: ProtectionStatus, orbSize: Dp = 180.dp) {
     }
 
     val infinite = rememberInfiniteTransition(label = "orb_pulse")
-    val pulse by infinite.animateFloat(
+    val pulse: Float by infinite.animateFloat(
         initialValue = 0.85f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(tween(1400), RepeatMode.Reverse),
@@ -48,7 +49,7 @@ fun StatusOrb(status: ProtectionStatus, orbSize: Dp = 180.dp) {
 
     Box(contentAlignment = Alignment.Center, modifier = Modifier.size(orbSize)) {
         Canvas(modifier = Modifier.size(orbSize)) {
-            val radiusPx = size.minDimension / 2f
+            val radiusPx: Float = size.minDimension / 2f
             drawCircle(
                 brush = Brush.radialGradient(
                     colors = listOf(color.copy(alpha = 0.45f * pulse), color.copy(alpha = 0f)),
